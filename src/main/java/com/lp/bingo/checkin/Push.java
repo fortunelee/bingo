@@ -233,7 +233,7 @@ public class Push {
 
         System.out.println(result.toString());*/
 
-        new Push().checkIn();
+        new Push().checkOut();
     }
 
 
