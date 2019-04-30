@@ -13,12 +13,13 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-@Component
 public class Push {
 
 
@@ -67,11 +68,16 @@ public class Push {
 
 
     // 签到
-    @Scheduled(cron = "")
-    public void checkIn() {
+    @Scheduled(cron = "0 20 8 ? * *")
+    public void checkIn() throws InterruptedException {
 
 
         if (checkDate()) return;
+
+        Random random = new Random();
+        int i = random.nextInt(899999);
+        Thread.sleep(i);
+        LocalDate now = LocalDate.now();
 
         // 需登陆后访问的 Url
         String dataUrl = "http://itsp.orientsec.com.cn/dfzq-sign/sign.do?xcase=doSign";
@@ -87,9 +93,7 @@ public class Push {
                     // 例如，referer 从哪里来的，UA 像搜索引擎都会表名自己是谁，无良搜索引擎除外
                     postMethod1.setRequestHeader("Referer", "http://itsp.orientsec.com.cn/dfzq-sign/sign.do");
                     postMethod1.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36");
-                    Random random = new Random();
-                    int i = random.nextInt(9);
-                    NameValuePair[] data1 = {new NameValuePair("optionCode", "1"), new NameValuePair("signTime", "08:3" + i + ":00"), new NameValuePair("signDesc", "")};
+                    NameValuePair[] data1 = {new NameValuePair("optionCode", "1"), new NameValuePair("signTime", now.toString().substring(0,8)), new NameValuePair("signDesc", "")};
                     postMethod1.setRequestBody(data1);
                     int i1 = httpClient.executeMethod(postMethod1);
                     System.out.println(i1);
@@ -176,9 +180,12 @@ public class Push {
 
 
     // 签退
+    @Scheduled(cron = "0 35 17 ? * *")
     public  void checkOut() throws IOException, URISyntaxException {
 
         if (checkDate()) return;
+
+        LocalDate now = LocalDate.now();
 
         // 需登陆后访问的 Url
         String dataUrl = "http://itsp.orientsec.com.cn/dfzq-sign/sign.do?xcase=doSign";
@@ -196,7 +203,7 @@ public class Push {
                 postMethod1.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36");
                 Random random = new Random();
                 int i = random.nextInt(9);
-                NameValuePair[] data1 = { new NameValuePair("optionCode", "2"), new NameValuePair("signTime", "17:40:08"),
+                NameValuePair[] data1 = { new NameValuePair("optionCode", "2"), new NameValuePair("signTime", now.toString().substring(0,8)),
                         new NameValuePair("signDesc", "")};
                 postMethod1.setRequestBody(data1);
                 int i1 = httpClient.executeMethod(postMethod1);
@@ -222,8 +229,6 @@ public class Push {
        /* DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate now = LocalDate.now();
         System.out.println( now.format(dtf));
-
-
         Map<String,String> map = new HashMap<>();
         map.put("date",now.format(dtf));
         String s = HttpClientUtils.simpleGetInvoke("http://api.goseek.cn/Tools/holiday", map);
@@ -233,7 +238,13 @@ public class Push {
 
         System.out.println(result.toString());*/
 
-        new Push().checkOut();
+        //new Push().checkOut();
+
+        DateTimeFormatter dtf= DateTimeFormatter.ofPattern("hh:ss:mm");
+        LocalTime now = LocalTime.now();
+
+        //Date date = new Date();
+        System.out.println(now.toString().substring(0,8));
     }
 
 
