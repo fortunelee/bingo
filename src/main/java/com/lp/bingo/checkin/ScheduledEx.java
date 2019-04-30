@@ -16,7 +16,7 @@ public class ScheduledEx {
     public void init() throws InterruptedException {
 
         while(true){
-            Thread.sleep(5000);{
+            Thread.sleep(1000);{
                 System.out.println("hello world!!!!!");
             }
         }
