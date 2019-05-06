@@ -8,6 +8,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
@@ -20,6 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+
+@Configuration
+@Component
 public class Push {
 
 
@@ -68,7 +72,6 @@ public class Push {
 
 
     // 签到
-    @Scheduled(cron = "0 20 8 ? * *")
     public void checkIn() throws InterruptedException {
 
 
@@ -180,7 +183,6 @@ public class Push {
 
 
     // 签退
-    @Scheduled(cron = "0 35 17 ? * *")
     public  void checkOut() throws IOException, URISyntaxException {
 
         if (checkDate()) return;
@@ -245,8 +247,26 @@ public class Push {
 
         //Date date = new Date();
         System.out.println(now.toString().substring(0,8));
+
+        Random random = new Random();
+        int i = random.nextInt(899999);
+
+        System.out.println(i);
     }
 
 
+    @Scheduled(cron = "0 35 17 ? * *")
+    public void out() throws IOException, URISyntaxException {
 
+        //System.out.println(statusCode);
+        checkOut();
+    }
+
+
+    @Scheduled(cron = "0 20 8 ? * *")
+    public void in() throws IOException, URISyntaxException, InterruptedException {
+
+        //System.out.println(statusCode);
+        checkIn();
+    }
 }
