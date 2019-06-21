@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -78,8 +79,8 @@ public class Push {
         if (checkDate()) return;
 
         Random random = new Random();
-        int i = random.nextInt(899999);
-        Thread.sleep(i);
+        //int i = random.nextInt(10);
+        //Thread.sleep(i);
         LocalDate now = LocalDate.now();
 
         // 需登陆后访问的 Url
@@ -189,8 +190,8 @@ public class Push {
 
         LocalDate now = LocalDate.now();
 
-        // 需登陆后访问的 Url
         String dataUrl = "http://itsp.orientsec.com.cn/dfzq-sign/sign.do?xcase=doSign";
+        // 需登陆后访问的 Url
         try {
             if(statusCode==302){//重定向到新的URL
                 System.out.println("模拟登录成功");
@@ -224,7 +225,7 @@ public class Push {
 
     }
 
-    public static void main(String[] args) throws URISyntaxException, IOException {
+    public static void main(String[] args) throws URISyntaxException, IOException, InterruptedException {
 
 
 
@@ -249,13 +250,18 @@ public class Push {
         System.out.println(now.toString().substring(0,8));
 
         Random random = new Random();
-        int i = random.nextInt(899999);
+
+        int i = random.nextInt(10);
 
         System.out.println(i);
+
+        System.out.println(LocalDateTime.now().getDayOfMonth());
+
+        new Push().checkOut();
     }
 
 
-    @Scheduled(cron = "0 35 17 ? * *")
+    @Scheduled(cron = "0 30 17 ? * *")
     public void out() throws IOException, URISyntaxException {
 
         //System.out.println(statusCode);
@@ -263,7 +269,7 @@ public class Push {
     }
 
 
-    @Scheduled(cron = "0 20 8 ? * *")
+    @Scheduled(cron = "0 38 8 ? * *")
     public void in() throws IOException, URISyntaxException, InterruptedException {
 
         //System.out.println(statusCode);
